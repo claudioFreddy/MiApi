@@ -3,8 +3,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
+RUN dotnet restore MiApi.csproj
+RUN dotnet publish MiApi.csproj -c Release -o out
+
 
 # Run
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
