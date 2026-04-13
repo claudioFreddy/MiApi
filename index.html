@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mis Tareas</title>
+</head>
+<body>
+
+<h1>Lista de Tareas</h1>
+
+<button onclick="cargarTareas()">Cargar tareas</button>
+
+<ul id="lista"></ul>
+
+<hr>
+
+<h2>Agregar tarea</h2>
+<input type="text" id="nuevaTarea">
+<button onclick="agregarTarea()">Agregar</button>
+
+<script>
+const url = "http://localhost:5048/api/tareas";
+
+function cargarTareas() {
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+
+      data.forEach(tarea => {
+        const li = document.createElement("li");
+        li.textContent = tarea;
+        lista.appendChild(li);
+      });
+    });
+}
+
+function agregarTarea() {
+  const input = document.getElementById("nuevaTarea");
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(input.value)
+  })
+  .then(() => {
+    input.value = "";
+    cargarTareas();
+  });
+}
+</script>
+
+</body>
+</html>
