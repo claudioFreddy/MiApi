@@ -18,18 +18,19 @@
 <button onclick="agregarTarea()">Agregar</button>
 
 <script>
-const url = "http://localhost:5048/api/tareas";
+const url =  "https://miapi-5-ucxp.onrender.com/api/tareas";
 
 function cargarTareas() {
   fetch(url)
     .then(res => res.json())
     .then(data => {
+       console.log("DATA API:", data);
       const lista = document.getElementById("lista");
       lista.innerHTML = "";
 
       data.forEach(tarea => {
         const li = document.createElement("li");
-        li.textContent = tarea;
+        li.textContent = tarea.title;
         lista.appendChild(li);
       });
     });
@@ -43,14 +44,14 @@ function agregarTarea() {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(input.value)
+    body: JSON.stringify({
+      title: input.value
+    })
   })
   .then(() => {
     input.value = "";
     cargarTareas();
   });
 }
+window.onload = cargarTareas;
 </script>
-
-</body>
-</html>
