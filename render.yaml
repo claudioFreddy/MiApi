@@ -3,5 +3,5 @@ services:
     name: miapi
     env: dotnet
     branch: main
-    buildCommand: dotnet publish MiApi.csproj -c Release -o out
+    buildCommand: dotnet nuget locals all --clear && dotnet restore MiApi.csproj && dotnet publish MiApi.csproj -c Release -o out
     startCommand: dotnet out/MiApi.dll
