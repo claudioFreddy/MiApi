@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: miapi
+    env: dotnet
+    branch: main
+    buildCommand: dotnet publish MiApi.csproj -c Release -o out
+    startCommand: dotnet out/MiApi.dll
