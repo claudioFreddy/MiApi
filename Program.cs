@@ -35,7 +35,7 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-
+// trigger deploy
 // Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
