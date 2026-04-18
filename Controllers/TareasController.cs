@@ -1,7 +1,8 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using MiApi.Models;
+using Microsoft.EntityFrameworkCore;
 using MiApi.Data;
+using MiApi.Models;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -9,39 +10,31 @@ public class TareasController : ControllerBase
 {
     private readonly AppDbContext _context;
 
-    //  CONSTRUCTOR (inyecta el contexto)
     public TareasController(AppDbContext context)
     {
         _context = context;
     }
-    private static List<Tarea> tareas = new();
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
+        var tareas = await _context.Tareas.ToListAsync();
         return Ok(tareas);
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] Tarea tarea)
+    public async Task<IActionResult> Post([FromBody] Tarea tarea)
     {
-        tareas.Add(tarea);
-        return Ok(tarea);
+        _context.Tareas.Add(tarea);
+        await _context.SaveChangesAsync();
+        return Ok(new {
+        tarea.Id,
+        tarea.Title});
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [HttpGet("debug")]
+        public IActionResult Debug()
     {
-        var tarea = _context.Tareas.Find(id);
-
-        if (tarea == null)
-    {
-        return NotFound();
+        return Ok(_context.Database.GetDbConnection().ConnectionString);
     }
-
-    _context.Tareas.Remove(tarea);
-    _context.SaveChanges();
-
-    return NoContent();
-}
 }
